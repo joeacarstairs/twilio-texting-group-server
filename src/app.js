@@ -1,11 +1,13 @@
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const express = require('express');
-const { isSubscribed, getSubscriptions, getSubscriptionFromNumber, subscribe, load: loadData } = require('./db');
-const { sendTextMessage } = require('./sendTextMessage');
 const { MessagingResponse } = require('twilio').twiml;
 
-dotenv.config({ path: '..' });
+dotenv.config();
+
+const { isSubscribed, getSubscriptions, getSubscriptionFromNumber, subscribe, load: loadData } = require('./db');
+const { sendTextMessage } = require('./sendTextMessage');
+
 loadData();
 const app = express();
 
