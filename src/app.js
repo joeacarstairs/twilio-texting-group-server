@@ -45,7 +45,7 @@ app.post('/sms', (req, res) => {
       twiml.message(`
         You have unsubscribed from the Glen Coe texting group. To join again,
         text 'my name is <your name>' to this number.
-      `);
+      `.replace(/\s+/g, ' '));
       res.type('text/xml').send(twiml.toString());
       return;
     }
