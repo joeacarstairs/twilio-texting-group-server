@@ -9,7 +9,9 @@ const subscriptions = [];
  * @param {string} name
  */
 function subscribe(number, name) {
-  subscriptions.push({ name, number });
+  const subscription = { name, number };
+  subscriptions.push(subscription);
+  return subscription;
 }
 
 /**
