@@ -40,6 +40,17 @@ function getSubscriptionFromNumber(number) {
   return subscriptions.find(sub => sub.number === number);
 }
 
+/**
+ * @param {string} number
+ */
+function unsubscribe(number) {
+  const index = subscriptions.findIndex(sub => sub.number === number);
+  if (index === -1) {
+    return null;
+  }
+  return subscriptions.splice(index, 1)[0];
+}
+
 async function save() {
   try {
     await fs.promises.writeFile('./data.json', JSON.stringify({ subscriptions }));
@@ -69,6 +80,7 @@ function load() {
 
 module.exports = {
   subscribe,
+  unsubscribe,
   isSubscribed,
   getSubscriptions,
   getSubscriptionFromNumber,

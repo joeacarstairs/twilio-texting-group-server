@@ -5,7 +5,7 @@ const { MessagingResponse } = require('twilio').twiml;
 
 dotenv.config();
 
-const { isSubscribed, getSubscriptions, getSubscriptionFromNumber, subscribe, load: loadData } = require('./db');
+const { isSubscribed, getSubscriptions, getSubscriptionFromNumber, subscribe, load: loadData, unsubscribe } = require('./db');
 const { sendTextMessage } = require('./sendTextMessage');
 
 loadData();
@@ -16,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.post('/sms', (req, res) => {
   /** @type {string} */
   const body = req.body.Body.trim();
+  const bodyLowerCase = body.toLocaleLowerCase();
   /** @type {string} */
   const senderPhoneNumber = req.body.From;
   /** @type {string} */
@@ -27,6 +28,26 @@ app.post('/sms', (req, res) => {
   `.replace(/\s+/g, ' '));
 
   if (isSubscribed(senderPhoneNumber)) {
+    if (['ls', 'list'].includes(bodyLowerCase)) {
+      const twiml = new MessagingResponse();
+      twiml.message(
+        getSubscriptions()
+        .map(({ name, number }) => `${name} (${number})`))
+        .join(', ');
+      res.type('text/xml').send(twiml.toString());
+      return;
+    }
+
+    if (['quit', 'exit', 'unsubscribe'].includes(bodyLowerCase)) {
+      unsubscribe(senderPhoneNumber);
+      const twiml = new MessagingResponse();
+      twiml.message(`
+        You have unsubscribed from the Glen Coe texting group. To join again,
+        text 'my name is <your name>' to this number.
+      `);
+      res.type('text/xml').send(twiml.toString());
+      return;
+    }
     const senderSubscription = getSubscriptionFromNumber(senderPhoneNumber);
     const otherSubscriptions = getSubscriptions().filter(sub => sub.number !== senderPhoneNumber);
 
@@ -40,7 +61,7 @@ app.post('/sms', (req, res) => {
     `.replace(/\s+/g, ' ');
     sendTextMessage([senderSubscription], confirmationMessage);
   } else {
-    if (body.toLocaleLowerCase().startsWith('my name is ') || body.toLocaleLowerCase().startsWith('my name is: ')) {
+    if (bodyLowerCase.startsWith('my name is ') || bodyLowerCase.startsWith('my name is: ')) {
       const senderName = body.matchAll(/^my name is:? (.*)$/gi)?.next()?.value?.[1];
 
       if (!senderName) {
@@ -54,7 +75,8 @@ app.post('/sms', (req, res) => {
       const welcomeMessage = `
         Well done, ${senderName}! You have successfully subscribed to the Glen
         Coe meet texting group. You will now be able to send and receive messages
-        to and from the group.
+        to and from the group. Send 'list' to list participants, and send 'quit'
+        to unsubscribe.
       `.replace(/\s+/g, ' ');
       sendTextMessage([subscription], welcomeMessage);
     } else {
