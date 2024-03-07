@@ -29,9 +29,9 @@ app.post('/sms', (req, res) => {
     const forwardedMessage = `${senderSubscription.name} said: ${body}`;
     sendTextMessage(otherSubscriptions, forwardedMessage);
 
-    const abbreviatedBody = body.length() > 10 ? `${body.slice(0, 8)}...` : body;
+    const abbreviatedBody = body.length > 10 ? `${body.slice(0, 8)}...` : body;
     const confirmationMessage = `
-      Your message was forwarded to ${otherSubscriptions.length()}
+      Your message was forwarded to ${otherSubscriptions.length}
       recipients: "${abbreviatedBody}". Only you can see this message.
     `.replace(/ +/g, ' ');
     sendTextMessage([senderSubscription], confirmationMessage);
