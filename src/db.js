@@ -42,7 +42,7 @@ function getSubscriptionFromNumber(number) {
 
 async function save() {
   try {
-    await writeFile('../data.json', JSON.stringify({ subscriptions }));
+    await writeFile('./data.json', JSON.stringify({ subscriptions }));
   } catch (err) {
     if (typeof err === 'string') {
       console.error(`Error writing data: ${err}`);
@@ -54,7 +54,7 @@ async function save() {
 
 function load() {
   try {
-    const data = JSON.parse(readFileSync('../data.json'));
+    const data = JSON.parse(readFileSync('./data.json'));
     while (subscriptions.pop()) {}
     subscriptions.push(...data['subscriptions']);
   } catch (err){
