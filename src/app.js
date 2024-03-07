@@ -19,7 +19,7 @@ app.post('/sms', (req, res) => {
   console.debug(`
     Received a text from ${senderCountry} on number ${senderPhoneNumber}.
     Message content: ${body}. End of message
-  `);
+  `.replace(/ +/g, ' '));
 
   if (isSubscribed(senderPhoneNumber)) {
     const senderSubscription = getSubscriptionFromNumber(senderPhoneNumber);
@@ -33,7 +33,7 @@ app.post('/sms', (req, res) => {
     const confirmationMessage = `
       Your message was forwarded to ${otherSubscriptions.length()}
       recipients: "${abbreviatedBody}". Only you can see this message.
-    `;
+    `.replace(/ +/g, ' ');
     sendTextMessage([senderSubscription], confirmationMessage);
   } else {
     if (body.toLocaleLowerCase().startsWith('my name is ') || body.toLocaleLowerCase().startsWith('my name is: ')) {
@@ -51,14 +51,14 @@ app.post('/sms', (req, res) => {
         Well done, ${senderName}! You have successfully subscribed to the Glen
         Coe meet texting group. You will now be able to send and receive messages
         to and from the group.
-      `;
+      `.replace(/ +/g, ' ');
       sendTextMessage([subscription], welcomeMessage);
     } else {
       const twiml = new MessagingResponse();
       twiml.message(`
         You are not subscribed to this texting group. To subscribe, send a
         text to this number with this syntax: my name is <your name>
-      `);
+      `.replace(/ +/g, ' '));
       res.type('text/xml').send(twiml.toString());
       return;
     }
