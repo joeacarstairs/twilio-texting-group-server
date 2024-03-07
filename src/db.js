@@ -8,18 +8,18 @@ const subscriptions = [];
  * @param {string} number
  * @param {string} name
  */
-export function subscribe(number, name) {
+function subscribe(number, name) {
   subscriptions.push({ name, number });
 }
 
 /**
  * @param {string} number
  */
-export function isSubscribed(number) {
+function isSubscribed(number) {
   return subscriptions.some(s => s.number === number);
 }
 
-export function getSubscriptions() {
+function getSubscriptions() {
   /** @type Array<{ name: string, number: string }> */
   const clone = [];
   for (const subscription of subscriptions) {
@@ -31,6 +31,13 @@ export function getSubscriptions() {
 /**
  * @param {string} number
  */
-export function getSubscriptionFromNumber(number) {
+function getSubscriptionFromNumber(number) {
   return subscriptions.find(sub => sub.number === number);
 }
+
+module.exports = {
+  subscribe,
+  isSubscribed,
+  getSubscriptions,
+  getSubscriptionFromNumber,
+};

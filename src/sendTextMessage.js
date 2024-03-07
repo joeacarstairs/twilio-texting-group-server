@@ -2,7 +2,7 @@
  * @param {Array<{name: string, number: string}>} subscriptions
  * @param {string} message
  */
-export function sendTextMessage(subscriptions, message) {
+function sendTextMessage(subscriptions, message) {
   for (const subscription of subscriptions) {
     const recipientNumber = subscription.number;
     console.warn(`
@@ -10,3 +10,5 @@ export function sendTextMessage(subscriptions, message) {
     `);
   }
 }
+
+module.exports = { sendTextMessage };
