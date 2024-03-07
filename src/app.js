@@ -39,7 +39,7 @@ app.post('/sms', (req, res) => {
       return;
     }
 
-    if (['quit', 'exit', 'unsubscribe'].includes(bodyLowerCase)) {
+    if (['exit', 'unsubscribe'].includes(bodyLowerCase)) {
       unsubscribe(senderPhoneNumber);
       const twiml = new MessagingResponse();
       twiml.message(`
@@ -76,7 +76,7 @@ app.post('/sms', (req, res) => {
       const welcomeMessage = `
         Well done, ${senderName}! You have successfully subscribed to the Glen
         Coe meet texting group. You will now be able to send and receive messages
-        to and from the group. Send 'list' to list participants, and send 'quit'
+        to and from the group. Send 'list' to list participants, and send 'exit'
         to unsubscribe.
       `.replace(/\s+/g, ' ');
       sendTextMessage([subscription], welcomeMessage);
