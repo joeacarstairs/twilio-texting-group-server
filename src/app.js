@@ -53,6 +53,14 @@ app.post('/sms', (req, res) => {
         to and from the group.
       `;
       sendTextMessage([subscription], welcomeMessage);
+    } else {
+      const twiml = new MessagingResponse();
+      twiml.message(`
+        You are not subscribed to this texting group. To subscribe, send a
+        text to this number with this syntax: my name is <your name>
+      `);
+      res.type('text/xml').send(twiml.toString());
+      return;
     }
   }
 
