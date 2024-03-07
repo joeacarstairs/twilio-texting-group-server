@@ -5,7 +5,7 @@ const { isSubscribed, getSubscriptions, getSubscriptionFromNumber, subscribe, lo
 const { sendTextMessage } = require('./sendTextMessage');
 const { MessagingResponse } = require('twilio').twiml;
 
-dotenv.config();
+dotenv.config({ path: '..' });
 loadData();
 const app = express();
 
