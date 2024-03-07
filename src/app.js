@@ -28,8 +28,7 @@ app.post('/sms', (req, res) => {
 
   if (isSubscribed(senderPhoneNumber)) {
     const senderSubscription = getSubscriptionFromNumber(senderPhoneNumber);
-    // TODO: enable filter. Just disabling so I can get the forwarded text to my own phone to check it works.
-    const otherSubscriptions = getSubscriptions()/* .filter(sub => sub.number != senderPhoneNumber) */;
+    const otherSubscriptions = getSubscriptions().filter(sub => sub.number !== senderPhoneNumber);
 
     const forwardedMessage = `${senderSubscription.name} said: ${body}`;
     sendTextMessage(otherSubscriptions, forwardedMessage);
