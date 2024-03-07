@@ -32,8 +32,9 @@ app.post('/sms', (req, res) => {
       const twiml = new MessagingResponse();
       twiml.message(
         getSubscriptions()
-        .map(({ name, number }) => `${name} (${number})`))
-        .join(', ');
+        .map(({ name, number }) => `${name} (${number})`)
+        .join(', ')
+      );
       res.type('text/xml').send(twiml.toString());
       return;
     }
