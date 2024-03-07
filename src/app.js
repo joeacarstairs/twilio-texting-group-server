@@ -37,7 +37,7 @@ app.post('/sms', (req, res) => {
     sendTextMessage([senderSubscription], confirmationMessage);
   } else {
     if (body.toLocaleLowerCase().startsWith('my name is ') || body.toLocaleLowerCase().startsWith('my name is: ')) {
-      const senderName = body.matchAll(/^my name is:? (.*)$/g)?.next()?.value?.[1];
+      const senderName = body.matchAll(/^my name is:? (.*)$/gi)?.next()?.value?.[1];
 
       if (!senderName) {
         const twiml = new MessagingResponse();
