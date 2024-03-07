@@ -1,9 +1,11 @@
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
 const express = require('express');
 const { isSubscribed, getSubscriptions, getSubscriptionFromNumber, subscribe, load: loadData } = require('./db');
 const { sendTextMessage } = require('./sendTextMessage');
 const { MessagingResponse } = require('twilio').twiml;
 
+dotenv.config();
 loadData();
 const app = express();
 
