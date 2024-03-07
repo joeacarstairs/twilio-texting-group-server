@@ -1,9 +1,10 @@
 const bodyParser = require('body-parser');
 const express = require('express');
-const { isSubscribed, getSubscriptions, getSubscriptionFromNumber, subscribe } = require('./db');
+const { isSubscribed, getSubscriptions, getSubscriptionFromNumber, subscribe, load: loadData } = require('./db');
 const { sendTextMessage } = require('./sendTextMessage');
 const { MessagingResponse } = require('twilio').twiml;
 
+loadData();
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
