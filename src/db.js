@@ -16,7 +16,7 @@ export function subscribe(number, name) {
  * @param {string} number
  */
 export function isSubscribed(number) {
-  return subscriptions.some(s => s.number == number);
+  return subscriptions.some(s => s.number === number);
 }
 
 export function getSubscriptions() {
@@ -26,4 +26,11 @@ export function getSubscriptions() {
     clone.push({ ...subscription });
   }
   return clone;
+}
+
+/**
+ * @param {string} number
+ */
+export function getSubscriptionFromNumber(number) {
+  return subscriptions.find(sub => sub.number === number);
 }
