@@ -7,13 +7,14 @@ dotenv.config();
 
 const { isSubscribed, getSubscriptions, getSubscriptionFromNumber, subscribe, load: loadData, unsubscribe } = require('./db');
 const { sendTextMessage } = require('./sendTextMessage');
+const { route, port, appName } = require('./config');
 
 loadData();
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.post('/sms', (req, res) => {
+app.post(route, (req, res) => {
   /** @type {string} */
   const body = req.body.Body.trim();
   const bodyLowerCase = body.toLocaleLowerCase();
@@ -43,7 +44,7 @@ app.post('/sms', (req, res) => {
       unsubscribe(senderPhoneNumber);
       const twiml = new MessagingResponse();
       twiml.message(`
-        You have unsubscribed from the Glen Coe texting group. To join again,
+        You have unsubscribed from the ${appName} texting group. To join again,
         text 'my name is <your name>' to this number.
       `.replace(/\s+/g, ' '));
       res.type('text/xml').send(twiml.toString());
@@ -74,10 +75,10 @@ app.post('/sms', (req, res) => {
 
       const subscription = subscribe(senderPhoneNumber, senderName);
       const welcomeMessage = `
-        Well done, ${senderName}! You have successfully subscribed to the Glen
-        Coe meet texting group. You will now be able to send and receive messages
-        to and from the group. Send 'list' to list participants, and send 'exit'
-        to unsubscribe.
+        Well done, ${senderName}! You have successfully subscribed to the
+        ${appName} meet texting group. You will now be able to send and receive
+        messages to and from the group. Send 'list' to list participants, and
+        send 'exit' to unsubscribe.
       `.replace(/\s+/g, ' ');
       sendTextMessage([subscription], welcomeMessage);
     } else {
@@ -95,6 +96,6 @@ app.post('/sms', (req, res) => {
   res.type('text/xml').send(twiml.toString());
 });
 
-app.listen(3000, () => {
-  console.log('Express server listening on port 3000');
+app.listen(port, () => {
+  console.log(`Express server listening on port ${port}`);
 });
